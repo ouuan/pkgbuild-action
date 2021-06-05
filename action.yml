@@ -1,0 +1,18 @@
+name: 'PKGBUILD Action'
+
+description: 'Make the package in a minimal environment and generate .SRCINFO.'
+     
+inputs:
+  path:
+    description: 'The path to the PKGBUILD'
+    required: true
+
+outputs:
+  pkgfile:
+    description: 'The path to the built package'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.path }}

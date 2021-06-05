@@ -1,0 +1,30 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pkgname: [cpeditor-git, paru-git, guide-bin, ttf-lxgw-wenkai, bilili, nodejs-git-split-diffs, nvim-packer-git]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Clone test repo
+        run: git clone https://aur.archlinux.org/${{ matrix.pkgname }}.git
+      - name: Build package
+        uses: ./
+        id: build-package
+        with:
+          path: ${{ matrix.pkgname }}
+      - name: Upload package
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.pkgname }}-package-${{ github.run_id }}
+          path: ${{ steps.build-package.outputs.pkgfile }}
+      - name: Upload whole directory
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.pkgname }}-directory-${{ github.run_id }}
+          path: ${{ matrix.pkgname }}/**
