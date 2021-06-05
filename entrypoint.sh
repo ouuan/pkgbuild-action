@@ -37,8 +37,8 @@ echo "::group::Remove paru and git"
 sudo pacman -Rns --noconfirm paru-bin git || true
 echo "::endgroup::"
 
-echo "::group::List explicitly installed packages"
-pacman -Qeq
+echo "::group::List all installed packages"
+pacman -Q
 echo "::endgroup::"
 
 echo "::group::Make the package"
