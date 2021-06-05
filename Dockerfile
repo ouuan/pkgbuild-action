@@ -1,6 +1,6 @@
-FROM archlinux
+FROM archlinux:base-devel
 
-RUN pacman -Syu --needed --noconfirm git namcap base-devel
+RUN pacman -Syu --needed --noconfirm git namcap
 
 RUN printf '[multilib]\nInclude = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
 
