@@ -23,7 +23,7 @@ source PKGBUILD
 echo "::endgroup::"
 
 echo "::group::Install depends"
-paru -Syu --needed --noconfirm "${depends[@]}" "${makedepends[@]}"
+paru -Syu --removemake --needed --noconfirm "${depends[@]}" "${makedepends[@]}"
 echo "::endgroup::"
 
 echo "::group::Remove paru and git"
