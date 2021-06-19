@@ -1,6 +1,8 @@
 name: 'PKGBUILD Action'
-
 description: 'Make the package in a minimal environment and generate .SRCINFO.'
+branding:
+  icon: package
+  color: blue
      
 inputs:
   path:
