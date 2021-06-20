@@ -46,16 +46,10 @@ echo "::endgroup::"
 
 echo "::group::Make package"
 logfile=$(mktemp)
-makepkg -s --noconfirm 2>"$logfile"
-warn="$(grep WARN "$logfile" || true)"
+makepkg -s --noconfirm 2>&1 | tee "$logfile"
+warn="$(grep WARNING "$logfile" || true)"
 outputwarning "$warn"
 echo "::endgroup::"
-
-if [[ -n "$warn" ]]; then
-    echo "::group::Show stderr of makepkg"
-    echo "$(cat "$logfile")"
-    echo "::endgroup::"
-fi
 
 echo "::group::Show package info"
 source /etc/makepkg.conf # get PKGEXT
