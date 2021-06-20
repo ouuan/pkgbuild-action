@@ -21,8 +21,8 @@ outputwarning() {
 
 abspath="$(realpath "$path")"
 
-HOME=/home/build
 echo "::group::Move files to $HOME"
+HOME=/home/build
 cd "$HOME"
 cp -r "$abspath" .
 cd "$(basename "$abspath")"
@@ -44,25 +44,28 @@ echo "::group::List all installed packages"
 pacman -Q
 echo "::endgroup::"
 
-echo "::group::Make the package"
+echo "::group::Make package"
 logfile=$(mktemp)
 makepkg -s --noconfirm 2>"$logfile"
 outputwarning "$(grep WARN "$logfile" || true)"
+echo "::endgroup::"
+
+echo "::group::Show package info"
 source /etc/makepkg.conf # get PKGEXT
 files=("${pkgname}-"*"${PKGEXT}")
 pkgfile="${files[0]}"
 echo "::set-output name=pkgfile::${pkgfile}"
+pacman -Qip "${pkgfile}"
+pacman -Qlp "${pkgfile}"
+echo "::endgroup::"
+
+echo "::group::Install namcap"
+sudo pacman -S --needed --noconfirm namcap
 echo "::endgroup::"
 
 echo "::group::Run namcap checks"
-sudo pacman -S --needed --noconfirm namcap
 outputwarning "$(namcap PKGBUILD)"
 outputwarning "$(namcap "${pkgfile}")"
-echo "::endgroup::"
-
-echo "::group::Show package info"
-pacman -Qip "${pkgfile}"
-pacman -Qlp "${pkgfile}"
 echo "::endgroup::"
 
 sudo mv "$pkgfile" /github/workspace
