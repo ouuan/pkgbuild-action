@@ -9,6 +9,16 @@ if [[ ! -d "$path" ]]; then
     exit 1
 fi
 
+outputwarning() {
+    local warnings="$1"
+    if [[ -n "$warnings" ]]; then
+        warnings="${warnings//'%'/'%25'}"
+        warnings="${warnings//$'\n'/'%0A'}"
+        warnings="${warnings//$'\r'/'%0D'}"
+        echo "::warning::$warnings"
+    fi
+}
+
 abspath="$(realpath "$path")"
 
 HOME=/home/build
@@ -35,7 +45,9 @@ pacman -Q
 echo "::endgroup::"
 
 echo "::group::Make the package"
-makepkg -s --noconfirm
+logfile=$(mktemp)
+makepkg -s --noconfirm 2>"$logfile"
+outputwarning "$(grep WARN "$logfile" || true)"
 source /etc/makepkg.conf # get PKGEXT
 files=("${pkgname}-"*"${PKGEXT}")
 pkgfile="${files[0]}"
@@ -44,20 +56,8 @@ echo "::endgroup::"
 
 echo "::group::Run namcap checks"
 sudo pacman -S --needed --noconfirm namcap
-warnings=$(namcap PKGBUILD)
-if [[ -n "$warnings" ]]; then
-    warnings="${warnings//'%'/'%25'}"
-    warnings="${warnings//$'\n'/'%0A'}"
-    warnings="${warnings//$'\r'/'%0D'}"
-    echo "::warning file=$path/PKGBUILD::$warnings"
-fi
-warnings=$(namcap "${pkgfile}")
-if [[ -n "$warnings" ]]; then
-    warnings="${warnings//'%'/'%25'}"
-    warnings="${warnings//$'\n'/'%0A'}"
-    warnings="${warnings//$'\r'/'%0D'}"
-    echo "::warning::$warnings"
-fi
+outputwarning "$(namcap PKGBUILD)"
+outputwarning "$(namcap "${pkgfile}")"
 echo "::endgroup::"
 
 echo "::group::Show package info"
