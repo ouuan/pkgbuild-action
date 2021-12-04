@@ -3,10 +3,10 @@ description: 'Make the package in a minimal environment and generate .SRCINFO.'
 branding:
   icon: package
   color: blue
-     
+
 inputs:
   path:
-    description: 'The path to the PKGBUILD'
+    description: 'The path to the directory containing the PKGBUILD'
     required: true
 
 outputs:

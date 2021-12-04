@@ -6,7 +6,7 @@ Make the package in a minimal environment and generate `.SRCINFO`.
 
 ### `path`
 
-The path to the `PKGBUILD`.
+The path to the directory containing the PKGBUILD.
 
 ## Outputs
 
