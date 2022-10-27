@@ -55,7 +55,7 @@ echo "::group::Show package info"
 source /etc/makepkg.conf # get PKGEXT
 files=("${pkgname}-"*"${PKGEXT}")
 pkgfile="${files[0]}"
-echo "pkgfile=${pkgfile}" >> "$GITHUB_OUTPUT"
+echo "pkgfile=${pkgfile}" | sudo tee -a "$GITHUB_OUTPUT"
 pacman -Qip "${pkgfile}"
 pacman -Qlp "${pkgfile}"
 echo "::endgroup::"
