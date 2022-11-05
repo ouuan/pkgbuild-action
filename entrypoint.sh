@@ -37,7 +37,7 @@ paru -Syu --removemake --needed --noconfirm "${depends[@]}" "${makedepends[@]}"
 echo "::endgroup::"
 
 echo "::group::Remove paru and git"
-sudo pacman -Rns --noconfirm paru-bin git || true
+sudo pacman -Rns --noconfirm paru-bin openssl-1.1 git || true
 echo "::endgroup::"
 
 echo "::group::List all installed packages"
