@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pkgname: [cpeditor-git, paru-git, guide-bin, ttf-lxgw-wenkai, bilili, nodejs-git-split-diffs, nvim-packer-git]
+        pkgname: [paru, yay, neovim-git]
     steps:
       - uses: actions/checkout@v2
       - name: Clone test repo
