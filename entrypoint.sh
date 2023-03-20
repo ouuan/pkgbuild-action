@@ -3,6 +3,7 @@
 set -eo pipefail
 
 path="$1"
+archive="$2"
 
 if [[ ! -d "$path" ]]; then
     echo "::error ::Invalid path: [$path]"
@@ -18,6 +19,13 @@ outputwarning() {
         echo "::warning::$warnings"
     fi
 }
+
+if [[ -n "$archive" ]]; then
+    echo "::group::Use archive on $archive"
+    echo "Server = https://archive.archlinux.org/repos/$archive/\$repo/os/\$arch" | sudo tee /etc/pacman.d/mirrorlist
+    sudo pacman -Syyuu --noconfirm
+    echo "::endgroup::"
+fi
 
 abspath="$(realpath "$path")"
 

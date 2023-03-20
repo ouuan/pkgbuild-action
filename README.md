@@ -8,6 +8,12 @@ Make the package in a minimal environment and generate `.SRCINFO`.
 
 The path to the directory containing the PKGBUILD.
 
+### `archive`
+
+Use [Arch Linux Archive](https://wiki.archlinux.org/title/Arch_Linux_Archive) on the specified date instead of using the latest repo.
+
+Example value: `2023/03/20`
+
 ## Outputs
 
 ### `pkgfile`
