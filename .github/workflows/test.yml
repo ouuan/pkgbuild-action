@@ -10,7 +10,7 @@ jobs:
       matrix:
         pkgname: [paru, yay, neovim-git]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Clone test repo
         run: git clone https://aur.archlinux.org/${{ matrix.pkgname }}.git
       - name: Build package
@@ -19,12 +19,12 @@ jobs:
         with:
           path: ${{ matrix.pkgname }}
       - name: Upload package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.pkgname }}-package-${{ github.run_id }}
           path: ${{ steps.build-package.outputs.pkgfile }}
       - name: Upload whole directory
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.pkgname }}-directory-${{ github.run_id }}
           path: ${{ matrix.pkgname }}/**
