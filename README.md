@@ -29,7 +29,7 @@ The path to the built package.
         with:
           path: pkgname
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: pkgname-${{ github.run_id }}
           path: ${{ steps.build-package.outputs.pkgfile }}
