@@ -29,8 +29,8 @@ fi
 
 abspath="$(realpath "$path")"
 
+export HOME=/home/build
 echo "::group::Move files to $HOME"
-HOME=/home/build
 cd "$HOME"
 cp -r "$abspath" .
 cd "$(basename "$abspath")"
