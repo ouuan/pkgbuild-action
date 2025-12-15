@@ -23,7 +23,7 @@ outputwarning() {
 if [[ -n "$archive" ]]; then
     echo "::group::Use archive on $archive"
     echo "Server = https://archive.archlinux.org/repos/$archive/\$repo/os/\$arch" | sudo tee /etc/pacman.d/mirrorlist
-    sudo pacman -Syyuu --noconfirm
+    sudo pacman --noconfirm -Syyuu
     echo "::endgroup::"
 fi
 
@@ -41,11 +41,11 @@ source PKGBUILD
 echo "::endgroup::"
 
 echo "::group::Install depends"
-paru -Syu --removemake --needed --noconfirm "${depends[@]}" "${makedepends[@]}"
+paru --noconfirm -Syu --removemake --needed "${depends[@]}" "${makedepends[@]}"
 echo "::endgroup::"
 
-echo "::group::Remove paru and git"
-sudo pacman -Rns --noconfirm paru-bin git || true
+echo "::group::Remove paru"
+sudo pacman --noconfirm -Rns paru || true
 echo "::endgroup::"
 
 echo "::group::List all installed packages"
@@ -54,7 +54,7 @@ echo "::endgroup::"
 
 echo "::group::Make package"
 logfile=$(mktemp)
-makepkg -s --noconfirm 2>&1 | tee "$logfile"
+makepkg --noconfirm -s 2>&1 | tee "$logfile"
 warn="$(grep WARNING "$logfile" || true)"
 outputwarning "$warn"
 echo "::endgroup::"
@@ -69,7 +69,7 @@ pacman -Qlp "${pkgfile}"
 echo "::endgroup::"
 
 echo "::group::Install namcap"
-sudo pacman -S --needed --noconfirm namcap
+sudo pacman --noconfirm -S --needed namcap
 echo "::endgroup::"
 
 echo "::group::Run namcap checks"

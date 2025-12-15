@@ -1,16 +1,21 @@
 FROM archlinux:base-devel
 
-RUN printf '[multilib]\nInclude = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
-RUN pacman -Syu --needed --noconfirm git
+# Install paru from archlinuxcn
+# Then remove the archlinuxcn repo to make sure the package builds without it
+RUN printf '[multilib]\nInclude = /etc/pacman.d/mirrorlist\n[archlinuxcn]\nServer = https://mirrors.xtom.us/archlinuxcn/$arch' >> /etc/pacman.conf \
+    && pacman --noconfirm -Syyu \
+    && pacman-key --init \
+    && pacman --noconfirm -S archlinuxcn-keyring \
+    && pacman --noconfirm -S paru \
+    && pacman -Rns --noconfirm archlinuxcn-keyring \
+    && sed -i '/archlinuxcn/d' /etc/pacman.conf
 
-RUN useradd -m build
-RUN echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+# Add non-root build user
+RUN useradd -m build && echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 WORKDIR /home/build
 USER build
 
-RUN git clone https://aur.archlinux.org/paru-bin.git
-RUN cd paru-bin && makepkg -si --noconfirm
-
+# Set NoCheck
 RUN mkdir -p .config/paru
 COPY paru.conf .config/paru
 
